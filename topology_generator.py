@@ -1,11 +1,11 @@
 from math import sqrt
 from random import choice
 
-X_SIZE = 4
-Y_SIZE = 4
+X_SIZE = 5
+Y_SIZE = 5
 INNER_RANGE = 1
 OUTER_RANGE = 2
-NUM_OF_BS = 2
+NUM_OF_BS = 4
 
 
 class Statuses:
@@ -49,13 +49,14 @@ def generate_topology():
     for i in range(0, NUM_OF_BS - 1):
         iteration_step(available_points)
 
-    for point in points:
-        if point.status == Statuses.STATION:
-            print(point.x, point.y)
+    for x_row in points:
+        for point in x_row:
+            if point.status == Statuses.STATION:
+                print(point.x, point.y)
 
 
 def iteration_step(available_points):
-    chosen_point = choice[available_points]
+    chosen_point = choice(available_points)
     points[chosen_point.x][chosen_point.y].status = Statuses.STATION
     for x_row in points:
         for point in x_row:
@@ -67,7 +68,6 @@ def iteration_step(available_points):
     for point in available_points:
         if points[point.x][point.y].status == Statuses.CORRUPTED or points[point.x][point.y].status == Statuses.STATION:
             available_points.remove(point)
-
 
 
 generate_topology()
