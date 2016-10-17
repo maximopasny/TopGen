@@ -1,11 +1,11 @@
 from math import sqrt
 from random import choice
 
-X_SIZE = 5
-Y_SIZE = 5
+X_SIZE = 3
+Y_SIZE = 3
 INNER_RANGE = 1
 OUTER_RANGE = 2
-NUM_OF_BS = 4
+NUM_OF_BS = 2
 
 
 class Statuses:
@@ -35,7 +35,7 @@ def points_distance(point1, point2):
     return sqrt(pow(2, (point1.x - point2.x)) + pow(2, (point1.y - point2.y)))
 
 
-def generate_topology():
+def generate_topology(points):
     available_points = []
     chosen_point = choice(choice(points))
     points[chosen_point.x][chosen_point.y].status = Statuses.STATION
@@ -70,4 +70,4 @@ def iteration_step(available_points):
             available_points.remove(point)
 
 
-generate_topology()
+generate_topology(points)
