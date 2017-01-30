@@ -17,15 +17,6 @@ def place_stations_opt(grid):
         update_points_status_opt(chosen_point, grid)
 
 
-def place_stations(grid):
-    chosen_point = choice(choice(grid))
-    chosen_point.status = Status.AVAILABLE
-    for i in range(0, NUM_OF_BS):
-        available_points = get_available_points(grid)
-        chosen_point = choice(available_points)
-        update_points_status(chosen_point, grid)
-
-
 def get_available_points(grid):
     available_points = []
     for x_row in grid:
@@ -33,24 +24,6 @@ def get_available_points(grid):
             if point.status == Status.AVAILABLE:
                 available_points.append(point)
     return available_points
-
-
-def update_points_status(chosen_point, grid):
-    chosen_point.status = Status.STATION
-    for x_row in grid:
-        for point in x_row:
-            if point.status != Status.BUSY and point.status != Status.STATION:
-                distance = points_distance(point, chosen_point)
-                if distance <= INNER_RANGE:
-                    point.status = Status.BUSY
-                if INNER_RANGE < distance <= OUTER_RANGE:
-                    point.status = Status.AVAILABLE
-
-            if point.status == Status.STATION:
-                distance = points_distance(point, chosen_point)
-                if distance <= OUTER_RANGE:
-                    point.neighbors.append(chosen_point.id())
-                    chosen_point.neighbors.append(chosen_point.id())
 
 
 def update_points_status_opt(chosen_point, grid):
