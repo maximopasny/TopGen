@@ -1,4 +1,5 @@
 from math import sqrt
+from constants import *
 
 
 class Status:
@@ -14,13 +15,18 @@ class Point:
         self.y = y
     x = -1
     y = -1
+    neighbors = []
     status = Status.FREE
+    id = -1
 
     def equals(self, point2):
         if self.x == point2.x and self.y == point2.y:
             return True
         else:
             return False
+
+    def id(self):
+        return self.x + self.y * Y_SIZE
 
 
 def points_distance(point1, point2):

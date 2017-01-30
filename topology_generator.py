@@ -5,13 +5,7 @@ from utils import Status
 from PIL import Image
 import xml.etree.ElementTree as ET
 import time
-
-
-X_SIZE = 200
-Y_SIZE = 200
-INNER_RANGE = 20
-OUTER_RANGE = 100
-NUM_OF_BS = 40
+from constants import *
 
 
 def place_stations_opt(grid):
@@ -52,6 +46,12 @@ def update_points_status(chosen_point, grid):
                 if INNER_RANGE < distance <= OUTER_RANGE:
                     point.status = Status.AVAILABLE
 
+            if point.status == Status.STATION:
+                distance = points_distance(point, chosen_point)
+                if distance <= OUTER_RANGE:
+                    point.neighbors.append(chosen_point.id())
+                    chosen_point.neighbors.append(chosen_point.id())
+
 
 def update_points_status_opt(chosen_point, grid):
     chosen_point.status = Status.STATION
@@ -75,6 +75,12 @@ def update_points_status_opt(chosen_point, grid):
                 if INNER_RANGE < distance <= OUTER_RANGE:
                     point.status = Status.AVAILABLE
 
+            if point.status == Status.STATION:
+                distance = points_distance(point, chosen_point)
+                if distance <= OUTER_RANGE:
+                    point.neighbors.append(chosen_point.id())
+                    chosen_point.neighbors.append(chosen_point.id())
+
 
 def validator(grid):
     stations = []
@@ -89,7 +95,7 @@ def validator(grid):
             distances.append(points_distance(station, measured_station))
     distances.sort()
     print(distances)
-    if distances[0] <= INNER_RANGE:
+    if distances[0] < INNER_RANGE:
         print("fail")
     else:
         print("success")
@@ -118,7 +124,13 @@ def create_xml(grid):
     for i in range(X_SIZE):
         for j in range(Y_SIZE):
             if grid[j][i].status == Status.STATION:
-                ET.SubElement(root, "point", {"x_coord": str(i), "y_coord": str(j)})
+                id = grid[j][i].id()
+                neighbors_points = grid[j][i].neighbors
+                neighbors_to_set = str(neighbors_points)
+                ET.SubElement(root, "point", {"id": str(id),
+                                              "x_coord": str(i),
+                                              "y_coord": str(j),
+                                              "neighbors": neighbors_to_set[1:len(neighbors_to_set) - 1]})
     ET.dump(root)
     tree = ET.ElementTree(root)
     tree.write("grid.xml")
