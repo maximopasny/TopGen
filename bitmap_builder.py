@@ -1,4 +1,4 @@
-from utils import Status
+from utils import Status, Color
 from PIL import Image
 from constants import *
 
@@ -16,7 +16,10 @@ class BitmapBuilder:
         for i in range(X_SIZE):  # for every pixel:
             for j in range(Y_SIZE):
                 if self.grid[j][i].status == Status.STATION:
-                    pixels[i, j] = (255, 0, 0)  # red
+                    if self.grid[j][i].color == Color.ZERO:
+                        pixels[i, j] = (255, 0, 0)  # red
+                    else:
+                        pixels[i, j] = (255, 255, 0)  # yellow
                 elif self.grid[j][i].status == Status.BUSY:
                     pixels[i, j] = (0, 0, 255)  # blue
                 elif self.grid[j][i].status == Status.AVAILABLE:

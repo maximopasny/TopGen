@@ -1,0 +1,3 @@
+class EdgeColoringBuilder:
+    grid = []
+    graph = []

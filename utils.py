@@ -44,3 +44,9 @@ def linear_to_dual(linear_coordinate):
     x = linear_coordinate % X_SIZE
     y = linear_coordinate // X_SIZE
     return (x, y)
+
+
+def get_point_object_by_id(grid, linear_coordinate):
+    x = linear_coordinate % X_SIZE
+    y = linear_coordinate // X_SIZE
+    return grid[y][x]
