@@ -9,15 +9,22 @@ class Status:
     STATION = 3
 
 
+class Color:
+    ZERO = 0
+    ONE = 1
+
+
 class Point:
     def __init__(self, x, y):
         self.x = x
         self.y = y
     x = -1
     y = -1
-    neighbors = []
+    neighbors_ignore_coloring = []
+    neighbors_note_coloring = []
     status = Status.FREE
     id = -1
+    color = Color.ZERO
 
     def equals(self, point2):
         if self.x == point2.x and self.y == point2.y:
@@ -31,3 +38,9 @@ class Point:
 
 def points_distance(point1, point2):
     return sqrt(pow((point1.x - point2.x), 2) + pow((point1.y - point2.y), 2))
+
+
+def linear_to_dual(linear_coordinate):
+    x = linear_coordinate % X_SIZE
+    y = linear_coordinate // X_SIZE
+    return (x, y)
