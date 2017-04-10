@@ -1,7 +1,6 @@
 import networkx as nx
-from constants import *
-from utils import *
 from networkx.algorithms import bipartite
+from tools.utils import *
 
 
 class NetworkXGraphBuilder:
@@ -40,6 +39,7 @@ class NetworkXGraphBuilder:
         graph.add_nodes_from(set_one, bipartite=1)
         add_edges(self, graph)
         print("NetworkX bipartite validation returns: " + str(bipartite.is_bipartite(graph)))
+        return graph
 
 
 

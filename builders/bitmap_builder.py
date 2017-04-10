@@ -1,6 +1,6 @@
-from utils import Status, Color
 from PIL import Image
-from constants import *
+from tools.constants import X_SIZE, Y_SIZE
+from tools.utils import Status, Color
 
 
 class BitmapBuilder:

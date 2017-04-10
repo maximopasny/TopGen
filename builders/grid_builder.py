@@ -1,7 +1,7 @@
-from random import choice, random
-from utils import points_distance, Color, linear_to_dual, get_point_object_by_id
-from utils import Status
-from constants import *
+from random import choice
+from tools.constants import OUTER_RANGE, Y_SIZE, X_SIZE, INNER_RANGE, NUM_OF_BS
+from tools.utils import Status
+from tools.utils import points_distance, Color, get_point_object_by_id
 
 
 class GridBuilder:

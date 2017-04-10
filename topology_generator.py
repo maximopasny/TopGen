@@ -1,9 +1,9 @@
-from utils import Point
-from constants import *
-from grid_builder import GridBuilder
-from bitmap_builder import BitmapBuilder
-from xml_builder import XmlBuilder
-from networkx_graph_builder import NetworkXGraphBuilder
+from builders.bitmap_builder import BitmapBuilder
+from builders.edge_coloring_builder import EdgeColoringBuilder
+from builders.grid_builder import GridBuilder
+from builders.networkx_graph_builder import NetworkXGraphBuilder
+from builders.xml_builder import XmlBuilder
+from tools.utils import Point, X_SIZE, Y_SIZE
 
 grid = [[Point(i, j) for i in range(X_SIZE)] for j in range(Y_SIZE)]
 gridBuilder = GridBuilder(grid)
@@ -13,9 +13,12 @@ bitmapBuilder = BitmapBuilder(grid)
 bitmapBuilder.create_bitmap()
 
 networkxGraphBuilder = NetworkXGraphBuilder(grid)
-networkxGraphBuilder.produce_networkx_graph()
+graph = networkxGraphBuilder.produce_networkx_graph()
 
-xmlBuilder = XmlBuilder(grid)
+edgeColoringBuilder = EdgeColoringBuilder(graph)
+channels = edgeColoringBuilder.color_edges_and_build_channels()
+
+xmlBuilder = XmlBuilder(grid, channels)
 xmlBuilder.create_xml()
 
 
