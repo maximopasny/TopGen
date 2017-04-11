@@ -29,10 +29,10 @@ class NedBuilder:
                         y = point_object.y
                         nodes_declarations_strings += "\t\t" + name + ": ColoredNode {\n" \
                                                     + "\t\t\tparameters:\n" \
-                                                    + "\t\t\t\tid = " + str(id) + "\n" \
-                                                    + "\t\t\t\tvertex_color = " + str(color) + "\n" \
-                                                    + "\t\t\t\tx = " + str(x) + "\n" \
-                                                    + "\t\t\t\ty = " + str(y) + "\n" \
+                                                    + "\t\t\t\tid = " + str(id) + ";\n" \
+                                                    + "\t\t\t\tvertex_color = " + str(color) + ";\n" \
+                                                    + "\t\t\t\tx = " + str(x) + ";\n" \
+                                                    + "\t\t\t\ty = " + str(y) + ";\n" \
                                                     + "\t\t}\n"
             return nodes_declarations_strings
 
@@ -53,18 +53,20 @@ class NedBuilder:
             channels_ned_names = list(string.ascii_uppercase)
             for same_colored_channels in self.channels:
                 for concrete_connection in same_colored_channels:
-                    connections_declarations_strings += ("\t\t\tcoloredNode" + str(concrete_connection[0])
-                                                         + ".port++ --> " + channels_ned_names[i] + " --> "
-                                                         + "coloredNode" + str(concrete_connection[1]) + ".port++;\n")
+                    connections_declarations_strings += ("\t\t\tcoloredNode_" + str(concrete_connection[0])
+                                                         + ".out" + "[" + str(i) + "]" + " --> " + channels_ned_names[i] + " --> "
+                                                         + "coloredNode_" + str(concrete_connection[1]) + ".in" + "[" + str(i) + "];\n")
                 i += 1
             return connections_declarations_strings
 
         f = open('attempt.ned', 'w')
+        header = "package topology_gen_stuff.simulations;\nimport topology_gen_stuff.ColoredNode;\n\n"
         channels_declarations_string = produce_channels(self)
         nodes_declarations_string = produce_nodes(self)
         connections_declarations_string = produce_connections(self)
 
-        f.write('network Network\n' +
+        f.write(header+
+                'network Network\n' +
                 '{\n' +
                 '\ttypes:\n' +
                 channels_declarations_string +

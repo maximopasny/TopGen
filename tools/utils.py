@@ -40,12 +40,6 @@ def points_distance(point1, point2):
     return sqrt(pow((point1.x - point2.x), 2) + pow((point1.y - point2.y), 2))
 
 
-def linear_to_dual(linear_coordinate):
-    x = linear_coordinate % X_SIZE
-    y = linear_coordinate // X_SIZE
-    return (x, y)
-
-
 def get_point_object_by_id(grid, linear_coordinate):
     x = linear_coordinate % X_SIZE
     y = linear_coordinate // X_SIZE
