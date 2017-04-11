@@ -11,7 +11,6 @@ class XmlBuilder:
         self.grid = grid
         self.channels = channels
 
-
     def create_xml(self):
         topology = ET.Element("topology")
         grid = ET.SubElement(topology, "grid")
