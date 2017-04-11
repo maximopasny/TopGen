@@ -24,8 +24,16 @@ class NedBuilder:
                         point_object = self.grid[j][i]
                         id = point_object.id()
                         color = point_object.color
-                        name = "node" + "_" + str(id)
-                        nodes_declarations_strings += "\t\t" + name + ": Node" + "\n"
+                        name = "coloredNode" + "_" + str(id)
+                        x = point_object.x
+                        y = point_object.y
+                        nodes_declarations_strings += "\t\t" + name + ": ColoredNode {\n" \
+                                                    + "\t\t\tparameters:\n" \
+                                                    + "\t\t\t\tid = " + str(id) + "\n" \
+                                                    + "\t\t\t\tvertex_color = " + str(color) + "\n" \
+                                                    + "\t\t\t\tx = " + str(x) + "\n" \
+                                                    + "\t\t\t\ty = " + str(y) + "\n" \
+                                                    + "\t\t}\n"
             return nodes_declarations_strings
 
         def produce_channels(self):
@@ -35,7 +43,7 @@ class NedBuilder:
             for channel in self.channels:
                 channels_declarations_strings += ("\t\tchannel " + channels_ned_names[i] + " {\n"
                                                   + "\t\t\tcolor = " + str(i)
-                                                  + "\n\t\t}\n")
+                                                  + ";\n\t\t}\n")
                 i += 1
             return channels_declarations_strings
 
@@ -45,9 +53,9 @@ class NedBuilder:
             channels_ned_names = list(string.ascii_uppercase)
             for same_colored_channels in self.channels:
                 for concrete_connection in same_colored_channels:
-                    connections_declarations_strings += ("\t\t\tnode" + str(concrete_connection[0])
-                                                         + ".port++ <--> " + channels_ned_names[i] + " <--> "
-                                                         + "node" + str(concrete_connection[1]) + ".port++;\n")
+                    connections_declarations_strings += ("\t\t\tcoloredNode" + str(concrete_connection[0])
+                                                         + ".port++ --> " + channels_ned_names[i] + " --> "
+                                                         + "coloredNode" + str(concrete_connection[1]) + ".port++;\n")
                 i += 1
             return connections_declarations_strings
 
