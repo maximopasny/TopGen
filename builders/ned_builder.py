@@ -28,12 +28,12 @@ class NedBuilder:
                         x = point_object.x
                         y = point_object.y
                         nodes_declarations_strings += "\t\t" + name + ": ColoredNode {\n" \
-                                                    + "\t\t\tparameters:\n" \
-                                                    + "\t\t\t\tid = " + str(id) + ";\n" \
-                                                    + "\t\t\t\tvertex_color = " + str(color) + ";\n" \
-                                                    + "\t\t\t\tx = " + str(x) + ";\n" \
-                                                    + "\t\t\t\ty = " + str(y) + ";\n" \
-                                                    + "\t\t}\n"
+                                                      + "\t\t\tparameters:\n" \
+                                                      + "\t\t\t\tid = " + str(id) + ";\n" \
+                                                      + "\t\t\t\tvertex_color = " + str(color) + ";\n" \
+                                                      + "\t\t\t\tx = " + str(x) + ";\n" \
+                                                      + "\t\t\t\ty = " + str(y) + ";\n" \
+                                                      + "\t\t}\n"
             return nodes_declarations_strings
 
         def produce_channels(self):
@@ -41,11 +41,23 @@ class NedBuilder:
             channels_ned_names = list(string.ascii_uppercase)
             i = 0
             for channel in self.channels:
-                channels_declarations_strings += ("\t\tchannel " + channels_ned_names[i] + " {\n"
+                channels_declarations_strings += ("\t\tchannel " + channels_ned_names[i] + " extends ColoredChannel {\n"
                                                   + "\t\t\tcolor = " + str(i)
                                                   + ";\n\t\t}\n")
                 i += 1
+
+            # in order to produce control channel
+            channels_declarations_strings += ("\t\tchannel CONTROL_CHANNEL extends ned.IdealChannel {\n"
+                                              + "\n\t\t}\n")
             return channels_declarations_strings
+
+        def produce_manager(self):
+            numberOfEdgeColors = len(self.channels)
+            manager_declaration_string = "\t\t" + "managerNode: Manager {\n" \
+                                         + "\t\t\tslotDuration = 1;\n" \
+                                         + "\t\t\tnumberOfEdgeColors = " + str(numberOfEdgeColors) + ";\n" \
+                                         + "\t\t}\n"
+            return manager_declaration_string
 
         def produce_connections(self):
             connections_declarations_strings = ""
@@ -54,23 +66,36 @@ class NedBuilder:
             for same_colored_channels in self.channels:
                 for concrete_connection in same_colored_channels:
                     connections_declarations_strings += ("\t\t\tcoloredNode_" + str(concrete_connection[0])
-                                                         + ".out" + "[" + str(i) + "]" + " --> " + channels_ned_names[i] + " --> "
-                                                         + "coloredNode_" + str(concrete_connection[1]) + ".in" + "[" + str(i) + "];\n")
+                                                         + ".out" + "[" + str(i) + "]" + " --> " + channels_ned_names[
+                                                             i] + " --> "
+                                                         + "coloredNode_" + str(
+                        concrete_connection[1]) + ".in" + "[" + str(i) + "];\n")
                 i += 1
+
+            slotForControl = len(self.channels)
+            for node in self.graph.node:
+                connections_declarations_strings += ("\t\t\tmanagerNode"
+                                                     + ".out" + " --> CONTROL_CHANNEL --> "
+                                                     + "coloredNode_" + str(node)
+                                                     + ".in" + "[" + str(slotForControl) + "];\n")
             return connections_declarations_strings
 
         f = open('attempt.ned', 'w')
-        header = "package topology_gen_stuff.simulations;\nimport topology_gen_stuff.ColoredNode;\n\n"
+        header = "package topology_gen_stuff.simulations;\nimport topology_gen_stuff.ColoredNode;\n" + \
+            "import topology_gen_stuff.ColoredChannel;\nimport topology_gen_stuff.Manager;\n\n"
+
         channels_declarations_string = produce_channels(self)
+        manager_declaration_string = produce_manager(self)
         nodes_declarations_string = produce_nodes(self)
         connections_declarations_string = produce_connections(self)
 
-        f.write(header+
+        f.write(header +
                 'network Network\n' +
                 '{\n' +
                 '\ttypes:\n' +
                 channels_declarations_string +
                 '\n\tsubmodules:\n' +
+                manager_declaration_string +
                 nodes_declarations_string +
                 '\n\tconnections:\n' +
                 connections_declarations_string +
