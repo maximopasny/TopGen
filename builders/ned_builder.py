@@ -66,18 +66,17 @@ class NedBuilder:
             for same_colored_channels in self.channels:
                 for concrete_connection in same_colored_channels:
                     connections_declarations_strings += ("\t\t\tcoloredNode_" + str(concrete_connection[0])
-                                                         + ".out" + "[" + str(i) + "]" + " --> " + channels_ned_names[
+                                                         + ".out++" + " --> " + channels_ned_names[
                                                              i] + " --> "
                                                          + "coloredNode_" + str(
-                        concrete_connection[1]) + ".in" + "[" + str(i) + "];\n")
+                        concrete_connection[1]) + ".in++;\n")
                 i += 1
 
-            slotForControl = len(self.channels)
             for node in self.graph.node:
                 connections_declarations_strings += ("\t\t\tmanagerNode"
-                                                     + ".out" + " --> CONTROL_CHANNEL --> "
+                                                     + ".out++" + " --> CONTROL_CHANNEL --> "
                                                      + "coloredNode_" + str(node)
-                                                     + ".in" + "[" + str(slotForControl) + "];\n")
+                                                     + ".in++;\n")
             return connections_declarations_strings
 
         f = open('attempt.ned', 'w')
