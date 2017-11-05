@@ -56,6 +56,7 @@ class NedBuilder:
             manager_declaration_string = "\t\t" + "managerNode: Manager {\n" \
                                          + "\t\t\tslotDuration = 1;\n" \
                                          + "\t\t\tnumberOfEdgeColors = " + str(numberOfEdgeColors) + ";\n" \
+                                         + "\t\t\tnumberOfStations = " + str(len(self.graph.node)) + ";\n" \
                                          + "\t\t}\n"
             return manager_declaration_string
 
